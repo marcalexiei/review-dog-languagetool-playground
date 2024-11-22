@@ -27,6 +27,7 @@ jobs:
 
       - name: Check for error annotations
         run: |
+          echo $GITHUB_WORKSPACE
           # Check if error annotations exist and fail the step if so
           if grep -q '::error' $GITHUB_WORKSPACE; then
             echo "Error annotations found!"

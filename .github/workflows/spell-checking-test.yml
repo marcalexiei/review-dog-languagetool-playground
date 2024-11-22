@@ -24,3 +24,14 @@ jobs:
           #enabled_categories: 'STYLE,PLAIN_ENGLISH,WHITESPACE_RULE,EN_QUOTES,DASH_RULE,WORD_CONTAINS_UNDERSCORE,UPPERCASE_SENTENCE_START,ARROWS,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION,SENTENCE_WHITESPACE,EN_UNPAIRED_BRACKETS,PHRASE_REPETITION,PUNCTUATION_PARAGRAPH_END'
           disabled_categories: ""
           disabled_rules: ""
+
+      - name: Check for error annotations
+        run: |
+          # Check if error annotations exist and fail the step if so
+          if grep -q '::error' $GITHUB_WORKSPACE; then
+            echo "Error annotations found!"
+            exit 1
+          fi
+
+      - name: Continue with other steps
+        run: echo "No errors detected in the previous step."

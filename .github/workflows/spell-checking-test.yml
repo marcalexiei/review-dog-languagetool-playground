@@ -1,29 +1,28 @@
-name: Spell Checker 2
+name: Fail Workflow on Error Annotations
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  spell_checking:
-    name: LanguageTool
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Review dog languagetool
-        id: "review"
-        uses: reviewdog/action-languagetool@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
-          reporter: "github-pr-check"
-          # Change reporter level if you need.
-          level: "error"
-          patterns: "**/*.md **/*.txt **/*.mdx"
-          #enabled_categories: 'STYLE,PLAIN_ENGLISH,WHITESPACE_RULE,EN_QUOTES,DASH_RULE,WORD_CONTAINS_UNDERSCORE,UPPERCASE_SENTENCE_START,ARROWS,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION,SENTENCE_WHITESPACE,EN_UNPAIRED_BRACKETS,PHRASE_REPETITION,PUNCTUATION_PARAGRAPH_END'
-          disabled_categories: ""
-          disabled_rules: ""
+      - name: Run your tests/build or script
+        run: |
+          # Example of generating error annotations
+          echo "::error file=example.txt,line=1::An error occurred in the build"
+          echo "::warning file=example.txt,line=2::This is a warning"
+          # Simulate a test or build failure (exit 1)
+          exit 0  # Change this based on your script
 
       - name: Check for error annotations
         id: check_annotations
@@ -36,5 +35,45 @@ jobs:
             echo "No error annotations found."
           fi
 
-      - name: Continue with other steps
-        run: echo "No errors detected in the previous step."
+      - name: Continue if no error
+        run: echo "Workflow continued successfully."
+# name: Spell Checker 2
+
+# on: [pull_request]
+
+# jobs:
+#   spell_checking:
+#     name: LanguageTool
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Review dog languagetool
+#         id: "review"
+#         uses: reviewdog/action-languagetool@v1
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+#           reporter: "github-pr-check"
+#           # Change reporter level if you need.
+#           level: "error"
+#           patterns: "**/*.md **/*.txt **/*.mdx"
+#           #enabled_categories: 'STYLE,PLAIN_ENGLISH,WHITESPACE_RULE,EN_QUOTES,DASH_RULE,WORD_CONTAINS_UNDERSCORE,UPPERCASE_SENTENCE_START,ARROWS,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION,SENTENCE_WHITESPACE,EN_UNPAIRED_BRACKETS,PHRASE_REPETITION,PUNCTUATION_PARAGRAPH_END'
+#           disabled_categories: ""
+#           disabled_rules: ""
+
+#       - name: Check for error annotations
+#         id: check_annotations
+#         run: |
+#           # Check for any `::error` annotations in the logs
+#           if grep -q '::error' $GITHUB_ENV; then
+#             echo "Error annotations found!"
+#             exit 1
+#           else
+#             echo "No error annotations found."
+#           fi
+
+#       - name: Continue with other steps
+#         run: echo "No errors detected in the previous step."

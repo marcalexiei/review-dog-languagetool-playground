@@ -26,12 +26,14 @@ jobs:
           disabled_rules: ""
 
       - name: Check for error annotations
+        id: check_annotations
         run: |
-          echo $GITHUB_WORKSPACE
-          # Check if error annotations exist and fail the step if so
-          if grep -q '::error' $GITHUB_WORKSPACE; then
+          # Check for any `::error` annotations in the logs
+          if grep -q '::error' $GITHUB_ENV; then
             echo "Error annotations found!"
             exit 1
+          else
+            echo "No error annotations found."
           fi
 
       - name: Continue with other steps

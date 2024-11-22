@@ -1,36 +1,57 @@
-name: Fail Workflow on Error Annotations
+name: Retrieve Logs Example
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+permissions:
+  checks: read
+  contents: read
+  pull-requests: read
 
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Run your build or tests
-        id: run_tests
+      - name: Run a command and create an annotation
         run: |
-          # Example of generating error annotations
-          echo "::error file=example.txt,line=1::An error occurred in the build"
-          echo "::warning file=example.txt,line=2::This is a warning"
-          # Simulate a test or build failure (exit 0)
-          exit 0  # Change this based on your script
+          echo "Hello, world!"
+          echo "::warning file=example.txt,line=1,col=5::This is a warning annotation!"
 
-      - name: Check for error annotations in logs
-        id: check_annotations
+      - name: Upload annotation log
+        id: upload_annotation
+        run: echo "Uploading annotations after the job completes"
+
+  get_logs:
+    needs: example_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve job logs
         run: |
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/marcalexiei/review-dog-languagetool-playground/actions/runs/${{ github.run_id }}/logs"
+          echo "Retrieving logs..."
+
+          # Set the variables for repo details and run/job info
+          REPO="marcalexiei/review-dog-languagetool-playground"
+          RUN_ID="${{ github.run_id }}"
+          JOB_NAME="example_job"
+
+          # Get job ID for 'example_job'
+          JOB_ID=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/$REPO/actions/runs/$RUN_ID/jobs | \
+            jq -r ".jobs[] | select(.name == \"$JOB_NAME\") | .id")
+
+          # Get logs for the job, including annotations
+          curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID/jobs/$JOB_ID/logs" \
+            -o job_logs.tar.gz
+
+          echo "Logs saved as job_logs.tar.gz"
 
 # name: Spell Checker 2
 

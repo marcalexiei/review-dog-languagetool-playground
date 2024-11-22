@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   spell_checking:
-    name: runner / LanguageTools
+    name: LanguageTool
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
-          reporter: "github-pr-annotations"
+          reporter: "github-pr-check"
           # Change reporter level if you need.
           level: "error"
           patterns: "**/*.md **/*.txt **/*.mdx"

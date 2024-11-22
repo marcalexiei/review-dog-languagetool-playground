@@ -20,7 +20,7 @@ jobs:
       - name: Run a command and create an annotation
         run: |
           echo "Hello, world!"
-          echo "::warning file=example.txt,line=1,col=5::This is a warning annotation!"
+          echo "::error file=example.txt,line=1,col=5::This is a warning annotation!"
 
       - name: Upload annotation log
         id: upload_annotation
@@ -51,8 +51,10 @@ jobs:
             "https://api.github.com/repos/$REPO/actions/runs/$RUN_ID/jobs/$JOB_ID/logs" \
             -o job_logs.tar.gz
 
-          echo "Logs saved as job_logs.tar.gz"
-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: job_logs.tar.gz
 # name: Spell Checker 2
 
 # on: [pull_request]

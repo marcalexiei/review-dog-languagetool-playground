@@ -37,16 +37,14 @@ jobs:
           fi
 
       - name: Review dog languagetool
-        run: echo "${{ steps.reporter.outputs.name }}"
-        #
-        # uses: reviewdog/action-languagetool@v1
-        # with:
-        #   github_token: ${{ secrets.GITHUB_TOKEN }}
-        #   # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
-        #   reporter: ${{ steps.reporter.outputs.name }}
-        #   # Change reporter level if you need.
-        #   level: "error"
-        #   patterns: "**/*.md **/*.txt **/*.mdx"
-        #   #enabled_categories: 'STYLE,PLAIN_ENGLISH,WHITESPACE_RULE,EN_QUOTES,DASH_RULE,WORD_CONTAINS_UNDERSCORE,UPPERCASE_SENTENCE_START,ARROWS,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION,SENTENCE_WHITESPACE,EN_UNPAIRED_BRACKETS,PHRASE_REPETITION,PUNCTUATION_PARAGRAPH_END'
-        #   disabled_categories: ""
-        #   disabled_rules: ""
+        uses: reviewdog/action-languagetool@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+          reporter: ${{ steps.reporter.outputs.name }}
+          # Change reporter level if you need.
+          level: "error"
+          patterns: "**/*.md **/*.txt **/*.mdx"
+          # enabled_categories: "STYLE,PLAIN_ENGLISH,WHITESPACE_RULE,EN_QUOTES,DASH_RULE,WORD_CONTAINS_UNDERSCORE,UPPERCASE_SENTENCE_START,ARROWS,COMMA_PARENTHESIS_WHITESPACE,UNLIKELY_OPENING_PUNCTUATION,SENTENCE_WHITESPACE,EN_UNPAIRED_BRACKETS,PHRASE_REPETITION,PUNCTUATION_PARAGRAPH_END"
+          disabled_categories: ""
+          disabled_rules: ""

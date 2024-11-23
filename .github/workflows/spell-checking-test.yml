@@ -40,6 +40,7 @@ jobs:
 
       - name: Review dog languagetool
         run: echo "${{ steps.reporter.outputs.name }}"
+        #
         # uses: reviewdog/action-languagetool@v1
         # with:
         #   github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -9,7 +9,7 @@ on:
 
 jobs:
   spell_checking:
-    name: runner / LanguageTools
+    name: LanguageTool
     runs-on: ubuntu-latest
 
     permissions:

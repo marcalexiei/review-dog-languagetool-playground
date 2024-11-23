@@ -1,5 +1,11 @@
 # Review dog language tool playground
 
+react
+
+typo arfgh2
+
+I live to mke tyo
+
 > [!NOTE]
 > Repository to test out `reviewdog/action-languagetool` action behavior
 >
